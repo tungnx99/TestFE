@@ -1,0 +1,39 @@
+<app-modal-header
+  [data]="modalHeader"
+  (onAction)="close($event)"
+></app-modal-header>
+<div class="modal-body">
+  <form name="productForm" [formGroup]="productForm">
+    <div class="form-group">
+      <label for="id" hidden="true">ID</label>
+      <input
+        formControlName="id"
+        type="text"
+        class="form-control"
+        id="id"
+        hidden="true"
+      />
+      <br />
+      <label for="name">name</label>
+      <input
+        formControlName="name"
+        type="text"
+        class="form-control"
+        id="name"
+      />
+      <br />
+      <label for="description">description</label>
+      <input
+        multiple
+        formControlName="description"
+        type="text"
+        class="form-control"
+        id="description"
+      />
+    </div>
+  </form>
+</div>
+<app-modal-footer
+  [data]="modalFooter"
+  (onAction)="save($event)"
+></app-modal-footer>

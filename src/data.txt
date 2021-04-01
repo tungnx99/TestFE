@@ -1,0 +1,5 @@
+Quan ly Danh muc san pham (Id, Name, Description)
+QUan ly nha phan phoi (Id, Name, Description)
+Quan ly san pham (id, CategoryId, SupplierId, Name, Description)
+Bao Cao
+Search ten san pham , nha phan phoi, danh muc
