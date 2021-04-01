@@ -39,7 +39,7 @@ export class SupplierShowComponent implements OnInit {
 
   onPageIndexChange(pageNumber: number) {
     this.params = {
-      pageNumber: pageNumber,
+      pageIndex: pageNumber,
     };
     this.header = {
       // Authorization: 'bearer ' + localStorage.getItem('token'),

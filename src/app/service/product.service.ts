@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { BaseService } from './base.service';
@@ -9,9 +9,9 @@ export class ProductAPI extends BaseService {
     super(http);
   }
 
-  getProducts(params: {}, headers: {}) {
+  getProducts(params: HttpParams, headers: {}) {
     return this.get<any>(`${environment.host}/api/product`, {
-      params: params,
+      params,
       headers: headers,
     });
   }

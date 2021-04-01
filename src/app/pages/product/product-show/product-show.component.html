@@ -1,20 +1,46 @@
+<table>
+  <tr>
+    <th>
+      Name Product
+    </th>
+    <th>
+      Name Category
+    </th>
+    <th>
+      Name Supplier
+    </th>
+  </tr>
+  <tr>
+    <td>
+      <input [(ngModel)]="keyNameProduct">
+    </td>
+    <td>
+      <input [(ngModel)]="keyNameCategory">
+    </td>
+    <td>
+      <input [(ngModel)]="keyNameSupplier">
+    </td>
+    <td>
+      <button (click)="onSearch()">Search</button>
+    </td>
+  </tr>
+</table>
+
 <button (click)="open(null)">Insert</button>
-<div *ngIf="data && data.data">
+<div *ngIf="data && data.results">
   <table>
     <tr>
-      <th>Id</th>
-      <th>CategoryId</th>
-      <th>SupplierId</th>
       <th>Name</th>
       <th>Description</th>
+      <th>Category</th>
+      <th>Supplier</th>
       <th>Settings</th>
     </tr>
-    <tr *ngFor="let item of data.data">
-      <td>{{ item.id }}</td>
-      <td>{{ item.categoryId }}</td>
-      <td>{{ item.supplierId }}</td>
+    <tr *ngFor="let item of data.results">
       <td>{{ item.name }}</td>
       <td>{{ item.description }}</td>
+      <td>{{ searchNameCategorybyID(item.categoryId) }}</td>
+      <td>{{ searchNameSupplierbyID(item.supplierId) }}</td>
       <td>
         <button (click)="open(item)">Update</button>
         <button (click)="delete(item.id)">Delete</button>
