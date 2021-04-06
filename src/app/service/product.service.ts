@@ -16,6 +16,12 @@ export class ProductAPI extends BaseService {
     });
   }
 
+  getProductById(id: String) {
+    return this.get<any>(`${environment.host}/api/product/getbyid`, {
+      params: new HttpParams().append('id', id.toString()),
+    });
+  }
+
   saveProduct(body: FormData) {
     return this.post<any>(`${environment.host}/api/product`, body);
   }
@@ -25,6 +31,9 @@ export class ProductAPI extends BaseService {
   }
 
   deleteProduct(body: any) {
-    return this.deleteWithId(`${environment.host}/api/product`, body.toString());
+    return this.deleteWithId(
+      `${environment.host}/api/product`,
+      body.toString()
+    );
   }
 }

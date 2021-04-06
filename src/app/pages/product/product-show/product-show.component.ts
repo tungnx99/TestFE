@@ -23,13 +23,8 @@ export class ProductShowComponent implements OnInit {
   keyNameCategory = '';
   keyNameSupplier = '';
 
-  dataCate!: any;
-  dataSupplier!: any;
-
   constructor(
     private apiProduct: ProductAPI,
-    private apiCategory: CategoryAPI,
-    private apiSupplier: SupplierAPI,
     private modalService: NgbModal
   ) {}
 
@@ -37,30 +32,11 @@ export class ProductShowComponent implements OnInit {
     this.refresh();
   }
 
-  searchNameCategorybyID(id: string) {
-    //check null
-    return this.dataCate.filter((x: any) => x.id === id)[0]?.name;
-  }
-
-  searchNameSupplierbyID(id: string) {
-    return this.dataSupplier.filter((x: any) => x.id === id)[0]?.name;
-  }
-
   get pagelist() {
     return this.data ? range(1, this.data.totalPage + 1) : [];
   }
 
   async refresh() {
-    await this.apiCategory.getAll({}, {}).subscribe((e: any) => {
-      if (e.status == 0) {
-        this.dataCate = e.data;
-      }
-    });
-    await this.apiSupplier.getAll({}, {}).subscribe((e: any) => {
-      if (e.status == 0) {
-        this.dataSupplier = e.data;
-      }
-    });
     await this.apiProduct
       .getProducts(this.params, this.header)
       .subscribe((res: any) => {
@@ -89,11 +65,11 @@ export class ProductShowComponent implements OnInit {
   }
 
   open(item: ProductDto | null) {
-    console.log(item);
+    console.log(item?.id);
     var modalRef = this.modalService.open(ProductEditComponent, {
       ariaLabelledBy: 'modal-basic-title',
     });
-    modalRef.componentInstance.item = item;  
+    modalRef.componentInstance.id = item?.id;  
     modalRef.result.then(
       (result) => {
         console.log(result);

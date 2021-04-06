@@ -36,8 +36,8 @@
       <tr *ngFor="let item of data.results">
         <td>{{ item.name }}</td>
         <td>{{ item.description }}</td>
-        <td>{{ searchNameCategorybyID(item.categoryId) }}</td>
-        <td>{{ searchNameSupplierbyID(item.supplierId) }}</td>
+        <td>{{ item.categoryName }}</td>
+        <td>{{ item.supplierName }}</td>
         <td>
           <button (click)="open(item)">Update</button>
           <button (click)="delete(item.id)">Delete</button>

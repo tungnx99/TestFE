@@ -5,25 +5,25 @@
 <div class="modal-body">
   <form name="productForm" [formGroup]="productForm">
     <div class="form-group">
-      <label for="id" hidden="true">ID</label>
-      <input
-        formControlName="id"
-        type="text"
-        class="form-control"
-        id="id"
-        hidden="true"
-      />
-      <br />
       <label for="categoryId">categoryId</label>
 <br/>
       <select formControlName="categoryId" id="categoryId">
-        <option *ngFor="let item of dataCate" value="{{item.id}}" >{{item.name}}</option>
+        <option *ngIf="data" value="{{data.categoryId}}">{{data.categoryName}}</option>
+        <ng-container *ngIf="dataCate" >
+          <option *ngFor="let item of dataCate" value="{{item.id}}" >{{item.name}}</option>
+        </ng-container>
+        
+        <option (click)="addValuesCategory()">...</option>
       </select>
       <br />
       <label for="supplierId">supplierId</label>
 <br/>
       <select formControlName="supplierId" id="supplierId">
-        <option *ngFor="let item of dataSupplier" value="{{item.id}}" >{{item.name}}</option>
+        <option *ngIf="data" value="{{data.supplierId}}">{{data.supplierName}}</option>
+        <ng-container *ngIf="dataSupplier">
+          <option *ngFor="let item of dataSupplier" value="{{item.id}}" >{{item.name}}</option>
+        </ng-container>
+        <option (click)="addValuesSupplier()">...</option>
       </select>
       <br />
       <label for="name">name</label>

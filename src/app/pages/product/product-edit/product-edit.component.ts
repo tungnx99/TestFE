@@ -1,7 +1,10 @@
+import { HttpParams } from '@angular/common/http';
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { ProductDto } from 'src/app/dtos/productDto';
+import { CategoryDto } from 'src/app/dtos/CategoryDto';
+import { ProductDto, ProductDtoReturn } from 'src/app/dtos/productDto';
+import { SupplierDto } from 'src/app/dtos/supplierDto';
 import { CategoryAPI } from 'src/app/service/category.service';
 import { ProductAPI } from 'src/app/service/product.service';
 import { SupplierAPI } from 'src/app/service/supplier.service';
@@ -17,12 +20,16 @@ import {
 })
 export class ProductEditComponent implements OnInit {
   productForm!: FormGroup;
-  item!: ProductDto;
+  id!: String;
   modalHeader!: ModalHeaderModel;
   modalFooter!: ModalFooterModel;
 
-  dataCate!: any;
-  dataSupplier!: any;
+  data!: ProductDtoReturn;
+
+  dataCate: CategoryDto[] = [];
+  dataSupplier: SupplierDto[] = [];
+  indexCate!: number;
+  indexSupplier!: number;
 
   constructor(
     private fb: FormBuilder,
@@ -33,49 +40,106 @@ export class ProductEditComponent implements OnInit {
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.item);
+    console.log(this.id);
   }
 
   ngOnInit(): void {
     this.install();
   }
 
+  callapi() {
+    // this.apiCategory.getAll({}, {}).subscribe((e: any) => {
+    //   if (e.status == 0) {
+    //     this.dataCate = e.data;
+    //   }
+    // });
+    // this.apiSupplier.getAll({}, {}).subscribe((e: any) => {
+    //   if (e.status == 0) {
+    //     this.dataSupplier = e.data;
+    //   }
+    // });
+    this.indexCate = 1;
+    this.indexSupplier = 1;
+    this.callapicategory(this.indexCate);
+    this.callapisupplier(this.indexSupplier);
+
+    if (this.id) {
+      this.apiProduct.getProductById(this.id).subscribe((e: any) => {
+        if (e.status == 0) {
+          this.data = e.data;
+          this.updateValues(this.data);
+        }
+      });
+    }
+  }
+
+  callapicategory(index: number) {
+    var params = new HttpParams().set('pageIndex', index.toString());
+
+    var header = {
+      // Authorization: 'bearer ' + localStorage.getItem('token'),
+    };
+
+    this.apiCategory.getCategorys(params, header).subscribe((res: any) => {
+      if (res.status == 0) {
+        this.dataCate = this.dataCate.concat(res.data.results as CategoryDto[]);
+      }
+    });
+  }
+
+  callapisupplier(index: number) {
+    var params = new HttpParams().set('pageIndex', index.toString());
+
+    var header = {
+      // Authorization: 'bearer ' + localStorage.getItem('token'),
+    };
+
+    this.apiSupplier.getSuppliers(params, header).subscribe((res: any) => {
+      if (res.status == 0) {
+        this.dataSupplier = this.dataSupplier.concat(
+          res.data.results as SupplierDto[]
+        );
+      }
+    });
+  }
+
   install() {
-    this.apiCategory.getAll({}, {}).subscribe((e: any) => {
-      if (e.status == 0) {
-        this.dataCate = e.data;
-      }
-    });
-    this.apiSupplier.getAll({}, {}).subscribe((e: any) => {
-      if (e.status == 0) {
-        this.dataSupplier = e.data;
-      }
-    });
     this.productForm = this.fb.group({
-      id: [this.item ? this.item.id : '', [Validators.required]],
-      categoryId: [
-        this.item ? this.item.categoryId : '',
-        [Validators.required],
-      ],
-      supplierId: [
-        this.item ? this.item.supplierId : '',
-        [Validators.required],
-      ],
-      name: [this.item ? this.item.name : '', [Validators.required]],
-      description: [
-        this.item ? this.item.description : '',
-        [Validators.required],
-      ],
+      categoryId: [this.data?.categoryId, [Validators.required]],
+      supplierId: [this.data?.supplierId, [Validators.required]],
+      name: [this.data?.name, [Validators.required]],
+      description: [this.data?.description, [Validators.required]],
     });
+
+    this.callapi();
+
     this.modalHeader = new ModalHeaderModel();
-    this.modalHeader.title = this.item ? `[Update] ${this.item.id}` : `[Add]`;
+    this.modalHeader.title = this.id ? `[Update] ${this.id}` : `[Add]`;
     this.modalFooter = new ModalFooterModel();
     this.modalFooter.title = 'Save';
   }
 
+  updateValues(data: ProductDtoReturn) {
+    this.productForm.setValue({
+      categoryId: data.categoryId,
+      supplierId: data.supplierId,
+      name: data.name,
+      description: data.description,
+    });
+  }
+
+  addValuesCategory() {
+    this.indexCate++;
+    this.callapicategory(this.indexCate);
+  }
+
+  addValuesSupplier() {
+    this.indexSupplier++;
+    this.callapisupplier(this.indexSupplier);
+  }
+
   save(event: any) {
-    this.item = this.productForm.value;
-    if (this.item) {
+    if (this.id) {
       this.update();
       return;
     }
@@ -87,14 +151,15 @@ export class ProductEditComponent implements OnInit {
   }
 
   createFormData() {
+    var data: ProductDto = this.productForm.value;
     var formData: any = new FormData();
-    if (this.item) {
-      formData.append('id', this.item.id);
+    if (this.id) {
+      formData.append('id', this.id);
     }
-    formData.append('categoryId', this.item.categoryId);
-    formData.append('supplierId', this.item.supplierId);
-    formData.append('name', this.item.name);
-    formData.append('description', this.item.description);
+    formData.append('categoryId', data.categoryId);
+    formData.append('supplierId', data.supplierId);
+    formData.append('name', data.name);
+    formData.append('description', data.description);
 
     return formData;
   }

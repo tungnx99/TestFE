@@ -5,3 +5,8 @@ export class ProductDto {
   public categoryId!: String;
   public supplierId!: String;
 }
+
+export class ProductDtoReturn extends ProductDto {
+  public categoryName!: String;
+  public supplierName!: String;
+}
