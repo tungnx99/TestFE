@@ -1,0 +1,28 @@
+.table {
+  tr {
+    background-color: #ffffff;
+    &:nth-child(even) {
+      background-color: #33cccc;
+    }
+
+    &:hover{
+        background-color: #0099cc;
+    }
+  }
+  td {
+    padding: 5px;
+    border-bottom: 1px solid #000066;
+  }
+
+  thead {
+      th{
+          font-weight: 700;
+          background-color: #660066;
+          color: #ffffff;
+      }
+  }
+}
+
+.table_container {
+    padding: 10px;
+}

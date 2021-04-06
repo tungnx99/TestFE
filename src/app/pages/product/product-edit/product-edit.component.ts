@@ -1,6 +1,7 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ProductDto } from 'src/app/dtos/productDto';
 import { CategoryAPI } from 'src/app/service/category.service';
 import { ProductAPI } from 'src/app/service/product.service';
 import { SupplierAPI } from 'src/app/service/supplier.service';
@@ -16,7 +17,7 @@ import {
 })
 export class ProductEditComponent implements OnInit {
   productForm!: FormGroup;
-  item!: any;
+  item!: ProductDto;
   modalHeader!: ModalHeaderModel;
   modalFooter!: ModalFooterModel;
 
@@ -73,6 +74,7 @@ export class ProductEditComponent implements OnInit {
   }
 
   save(event: any) {
+    this.item = this.productForm.value;
     if (this.item) {
       this.update();
       return;
@@ -89,10 +91,10 @@ export class ProductEditComponent implements OnInit {
     if (this.item) {
       formData.append('id', this.item.id);
     }
-    formData.append('categoryId', this.productForm.get('categoryId')!.value);
-    formData.append('supplierId', this.productForm.get('supplierId')!.value);
-    formData.append('name', this.productForm.get('name')!.value);
-    formData.append('description', this.productForm.get('description')!.value);
+    formData.append('categoryId', this.item.categoryId);
+    formData.append('supplierId', this.item.supplierId);
+    formData.append('name', this.item.name);
+    formData.append('description', this.item.description);
 
     return formData;
   }

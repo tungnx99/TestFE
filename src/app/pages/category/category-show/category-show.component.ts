@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { range } from 'lodash';
+import { CategoryDto } from 'src/app/dtos/CategoryDto';
 import { CategoryAPI } from 'src/app/service/category.service';
 import { CategoryEditComponent } from '../category-edit/category-edit.component';
 
 @Component({
   selector: 'app-category-show',
   templateUrl: './category-show.component.html',
-  styleUrls: ['./category-show.component.scss']
+  styleUrls: ['./category-show.component.scss'],
 })
 export class CategoryShowComponent implements OnInit {
   data!: any;
@@ -25,14 +26,14 @@ export class CategoryShowComponent implements OnInit {
     return this.data ? range(1, this.data.totalPage + 1) : [];
   }
 
-  async refresh()
-  {
-    await this.api.getCategorys(this.params, this.header).subscribe((res: any) => {
-      if(res.status == 0)
-      {
-        this.data = res.data;
-      }
-    });
+  async refresh() {
+    await this.api
+      .getCategorys(this.params, this.header)
+      .subscribe((res: any) => {
+        if (res.status == 0) {
+          this.data = res.data;
+        }
+      });
   }
 
   onPageIndexChange(pageNumber: number) {
@@ -54,7 +55,7 @@ export class CategoryShowComponent implements OnInit {
     }
   }
 
-  open(item: any) {
+  open(item: CategoryDto | null) {
     console.log(item);
     var modalRef = this.modalService.open(CategoryEditComponent, {
       ariaLabelledBy: 'modal-basic-title',

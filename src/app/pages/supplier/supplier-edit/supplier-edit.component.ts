@@ -1,18 +1,21 @@
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { SupplierDto } from 'src/app/dtos/supplierDto';
 import { SupplierAPI } from 'src/app/service/supplier.service';
-import { ModalHeaderModel, ModalFooterModel } from 'src/app/shared/components/modals/models/modal.model';
+import {
+  ModalHeaderModel,
+  ModalFooterModel,
+} from 'src/app/shared/components/modals/models/modal.model';
 
 @Component({
   selector: 'app-supplier-edit',
   templateUrl: './supplier-edit.component.html',
-  styleUrls: ['./supplier-edit.component.scss']
+  styleUrls: ['./supplier-edit.component.scss'],
 })
 export class SupplierEditComponent implements OnInit {
-
   productForm!: FormGroup;
-  item!: any;
+  item!: SupplierDto;
   modalHeader!: ModalHeaderModel;
   modalFooter!: ModalFooterModel;
 
@@ -33,14 +36,6 @@ export class SupplierEditComponent implements OnInit {
   install() {
     this.productForm = this.fb.group({
       id: [this.item ? this.item.id : '', [Validators.required]],
-      categoryId: [
-        this.item ? this.item.categoryId : '',
-        [Validators.required],
-      ],
-      supplierId: [
-        this.item ? this.item.supplierId : '',
-        [Validators.required],
-      ],
       name: [this.item ? this.item.name : '', [Validators.required]],
       description: [
         this.item ? this.item.description : '',
@@ -54,6 +49,7 @@ export class SupplierEditComponent implements OnInit {
   }
 
   save(event: any) {
+    this.item = this.productForm.value;
     if (this.item) {
       this.update();
       return;
@@ -70,8 +66,8 @@ export class SupplierEditComponent implements OnInit {
     if (this.item) {
       formData.append('id', this.item.id);
     }
-    formData.append('name', this.productForm.get('name')!.value);
-    formData.append('description', this.productForm.get('description')!.value);
+    formData.append('name', this.item.name);
+    formData.append('description', this.item.description);
 
     return formData;
   }
@@ -98,5 +94,4 @@ export class SupplierEditComponent implements OnInit {
       }
     );
   }
-
 }

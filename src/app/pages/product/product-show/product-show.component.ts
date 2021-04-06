@@ -2,6 +2,7 @@ import { HttpParams } from '@angular/common/http';
 import { APP_ID, Component, OnInit } from '@angular/core';
 import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { cloneDeep, range } from 'lodash';
+import { ProductDto } from 'src/app/dtos/productDto';
 import { CategoryAPI } from 'src/app/service/category.service';
 import { ProductAPI } from 'src/app/service/product.service';
 import { SupplierAPI } from 'src/app/service/supplier.service';
@@ -36,14 +37,13 @@ export class ProductShowComponent implements OnInit {
     this.refresh();
   }
 
-  searchNameCategorybyID(id: string)
-  {
-    return this.dataCate.filter((x:any) => x.id === id)[0].name;
+  searchNameCategorybyID(id: string) {
+    //check null
+    return this.dataCate.filter((x: any) => x.id === id)[0]?.name;
   }
 
-  searchNameSupplierbyID(id: string)
-  {
-    return this.dataSupplier.filter((x:any) => x.id === id)[0].name;
+  searchNameSupplierbyID(id: string) {
+    return this.dataSupplier.filter((x: any) => x.id === id)[0]?.name;
   }
 
   get pagelist() {
@@ -88,12 +88,12 @@ export class ProductShowComponent implements OnInit {
     }
   }
 
-  open(item: any) {
+  open(item: ProductDto | null) {
     console.log(item);
     var modalRef = this.modalService.open(ProductEditComponent, {
       ariaLabelledBy: 'modal-basic-title',
     });
-    modalRef.componentInstance.item = item;
+    modalRef.componentInstance.item = item;  
     modalRef.result.then(
       (result) => {
         console.log(result);

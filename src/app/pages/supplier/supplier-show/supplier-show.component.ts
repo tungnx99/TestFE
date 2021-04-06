@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { range } from 'lodash';
+import { SupplierDto } from 'src/app/dtos/supplierDto';
 import { CategoryAPI } from 'src/app/service/category.service';
 import { SupplierAPI } from 'src/app/service/supplier.service';
 import { CategoryEditComponent } from '../../category/category-edit/category-edit.component';
+import { SupplierEditComponent } from '../supplier-edit/supplier-edit.component';
 
 @Component({
   selector: 'app-supplier-show',
@@ -56,9 +58,9 @@ export class SupplierShowComponent implements OnInit {
     }
   }
 
-  open(item: any) {
+  open(item: SupplierDto| null) {
     console.log(item);
-    var modalRef = this.modalService.open(CategoryEditComponent, {
+    var modalRef = this.modalService.open(SupplierEditComponent, {
       ariaLabelledBy: 'modal-basic-title',
     });
     modalRef.componentInstance.item = item;
