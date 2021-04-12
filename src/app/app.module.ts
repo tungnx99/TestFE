@@ -9,7 +9,7 @@ import { CommonModule, registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzIconModule } from 'ng-zorro-antd/icon';
@@ -22,52 +22,49 @@ import { NzCardModule } from 'ng-zorro-antd/card';
 import { enableProdMode } from '@angular/core';
 import { SharedModule } from './shared/shared.module';
 import { NgbAlertModule, NgbModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { CategoryShowComponent } from './pages/category/category-show/category-show.component';
-import { ProductShowComponent } from './pages/product/product-show/product-show.component';
-import { SupplierShowComponent } from './pages/supplier/supplier-show/supplier-show.component';
 import { ProductAPI } from './service/product.service';
-import { ProductEditComponent } from './pages/product/product-edit/product-edit.component';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CategoryAPI } from './service/category.service';
 import { SupplierAPI } from './service/supplier.service';
-import { CategoryEditComponent } from './pages/category/category-edit/category-edit.component';
-import { SupplierEditComponent } from './pages/supplier/supplier-edit/supplier-edit.component';
+import { CategoryModule } from './pages/category/category.module';
+import { HomeModule } from './pages/home/home.module';
+import { AuthModule } from './pages/auth/auth.module';
+import { ProductModule } from './pages/product/product.module';
+import { SupplierModule } from './pages/supplier/supplier.module';
 registerLocaleData(en);
 enableProdMode();
 
 @NgModule({
   declarations: [
     AppComponent,
-    CategoryShowComponent,
-    ProductShowComponent,
-    SupplierShowComponent,
-    ProductEditComponent,
-    CategoryEditComponent,
-    SupplierEditComponent
   ],
   imports: [
-    SharedModule,
     BrowserModule,
+    BrowserAnimationsModule,
     AppRoutingModule,
+    CategoryModule,
+    HomeModule,
+    AuthModule,
+    ProductModule,
+    SupplierModule,
+    SharedModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    BrowserAnimationsModule,
     NzFormModule,
     NzButtonModule,
     NzIconModule,
     NzCheckboxModule,
     NzInputModule,
-    CommonModule,
     NzPaginationModule,
     NzListModule,
     NzCardModule,
     NgbModule,
     NgbPaginationModule,
     NgbAlertModule,
-    NzSelectModule 
+    NzSelectModule,
   ],
-  providers: [{ provide: NZ_I18N, useValue: en_US }, ProductAPI, CategoryAPI, SupplierAPI],
+  providers: [{ provide: NZ_I18N, useValue: en_US }],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

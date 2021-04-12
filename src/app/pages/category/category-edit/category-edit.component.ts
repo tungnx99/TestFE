@@ -2,6 +2,7 @@ import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { CategoryDto } from 'src/app/dtos/CategoryDto';
+import { ProductDto } from 'src/app/dtos/productDto';
 import { CategoryAPI } from 'src/app/service/category.service';
 import { ProductAPI } from 'src/app/service/product.service';
 import {
@@ -50,7 +51,6 @@ export class CategoryEditComponent implements OnInit {
   }
 
   save(event: any) {
-    this.item = this.productForm.value;
     if (this.item) {
       this.update();
       return;
@@ -63,12 +63,13 @@ export class CategoryEditComponent implements OnInit {
   }
 
   createFormData() {
+    var item : ProductDto = this.productForm.value;
     var formData: any = new FormData();
     if (this.item) {
-      formData.append('id', this.item.id);
+      formData.append('id', item.id);
     }
-    formData.append('name', this.item.name);
-    formData.append('description', this.item.description);
+    formData.append('name', item.name);
+    formData.append('description', item.description);
 
     return formData;
   }

@@ -22,18 +22,32 @@ export class ProductShowComponent implements OnInit {
   keyNameProduct = '';
   keyNameCategory = '';
   keyNameSupplier = '';
+  keyDescription = '';
 
-  constructor(
-    private apiProduct: ProductAPI,
-    private modalService: NgbModal
-  ) {}
+  constructor(private apiProduct: ProductAPI, private modalService: NgbModal) {
+    this.params = new HttpParams();
+  }
 
   ngOnInit() {
     this.refresh();
   }
 
   get pagelist() {
-    return this.data ? range(1, this.data.totalPage + 1) : [];
+    if (!this.data) {
+      return [];
+    }
+    if (this.data.totalPage < 5) {
+      return range(1, this.data.totalPage + 1);
+    }
+    if (this.data.pageIndex <= 2) {
+      return range(1, 5);
+    }
+    if (this.data.pageIndex > this.data.totalPage - 2) {
+      return range(this.data.totalPage - 3, this.data.totalPage + 1);
+    }
+    return this.data
+      ? range(this.data.pageIndex - 1, this.data.pageIndex + 3)
+      : [];
   }
 
   async refresh() {
@@ -47,7 +61,7 @@ export class ProductShowComponent implements OnInit {
   }
 
   onPageIndexChange(pageNumber: number) {
-    this.params = new HttpParams().set('pageIndex', pageNumber.toString());
+    this.params = this.params.set('pageIndex', pageNumber.toString());
 
     this.header = {
       // Authorization: 'bearer ' + localStorage.getItem('token'),
@@ -69,7 +83,7 @@ export class ProductShowComponent implements OnInit {
     var modalRef = this.modalService.open(ProductEditComponent, {
       ariaLabelledBy: 'modal-basic-title',
     });
-    modalRef.componentInstance.id = item?.id;  
+    modalRef.componentInstance.id = item?.id;
     modalRef.result.then(
       (result) => {
         console.log(result);
@@ -91,11 +105,72 @@ export class ProductShowComponent implements OnInit {
     }
   }
 
-  public onSearch() {
-    this.params = new HttpParams();
+  public settings = {
+    hideSubHeader: true,
+    // pager: {
+    //   display: true,
+    //   perPage: 5,
+    // },
+    actions: {
+      // columnTitle: '',
+      custom: [
+        {
+          name: 'editAction',
+          title:
+            '<a class="ng2-smart-action ng2-smart-action-edit-edit ng-star-inserted">Edit</a>',
+        },
+        {
+          name: 'deleteAction',
+          title:
+            '<a class="ng2-smart-action ng2-smart-action-delete-delete ng-star-inserted">Delete</a>',
+        },
+      ],
+      add: false,
+      edit: false,
+      delete: false,
+      position: 'right',
+    },
+    columns: {
+      // id: {
+      //   title: 'ID',
+      // },
+      name: {
+        title: 'Name',
+      },
+      description: {
+        title: 'Description',
+      },
+      categoryName:{
+        title: 'Category',
+      },
+      supplierName:{
+        title: 'Supplier',
+      },
+    },
+  };
 
+  onCustom(event: any) {
+    console.log(event.action);
+    if (event.action == 'editAction') {
+      this.open(event.data);
+    }
+    if (event.action == 'deleteAction') {
+      this.delete(event.data.id);
+    }
+  }
+
+  onSearch() {
+    this.params = new HttpParams();
     if (this.keyNameProduct) {
-      this.params = this.params.set('search.name', this.keyNameProduct);
+      this.params = this.params.set(
+        'search.name',
+        this.keyNameProduct
+      );
+    }
+
+    if(this.keyDescription)
+    {
+      this.params = this.params.set('search.description', this.keyDescription);
     }
 
     if (this.keyNameCategory) {

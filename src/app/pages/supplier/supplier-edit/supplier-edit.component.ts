@@ -49,7 +49,6 @@ export class SupplierEditComponent implements OnInit {
   }
 
   save(event: any) {
-    this.item = this.productForm.value;
     if (this.item) {
       this.update();
       return;
@@ -62,12 +61,13 @@ export class SupplierEditComponent implements OnInit {
   }
 
   createFormData() {
+    var item : SupplierDto = this.productForm.value;
     var formData: any = new FormData();
     if (this.item) {
-      formData.append('id', this.item.id);
+      formData.append('id', item.id);
     }
-    formData.append('name', this.item.name);
-    formData.append('description', this.item.description);
+    formData.append('name', item.name);
+    formData.append('description', item.description);
 
     return formData;
   }
